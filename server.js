@@ -1,30 +1,30 @@
 const express = require("express");
-const logger = require("morgan");
+// const logger = require("morgan");
 const mongoose = require("mongoose");
 
 const PORT = process.env.PORT || 3000;
 
-const User = require("./userModel.js");
+const User = require("./models/workoutModel.js");
 const app = express();
 
-app.use(logger("dev"));
+// app.use(logger("dev"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(express.static("public"));
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/userdb", { useNewUrlParser: true });
+// Routes
+require(`./routes/htmlRoutes.js`)(app);
+require(`./routes/apiRoutes.js`)(app);
 
-app.post("/submit", ({body}, res) => {
-  User.create(body)
-    .then(dbUser => {
-      res.json(dbUser);
-    })
-    .catch(err => {
-      res.json(err);
+mongoose
+  .connect(process.env.MONGODB_URI || "mongodb://localhost/workouts", {
+    useNewUrlParser: true,
+  })
+  .then(() => {
+    console.log("Database Connected!");
+    app.listen(PORT, () => {
+      console.log(`App running on port ${PORT}!`);
     });
-});
-
-app.listen(PORT, () => {
-  console.log(`App running on port ${PORT}!`);
+  });
