@@ -43,6 +43,10 @@ WorkoutSchema.statics.getAllWorkouts = function () {
   return this.find({});
 };
 
+WorkoutSchema.statics.addExercise = function (newExercise, id) {
+  return this.updateOne({ _id: id }, { $push: { exercises: newExercise } });
+};
+
 const Workout = mongoose.model("Workout", WorkoutSchema);
 
 module.exports = Workout;
