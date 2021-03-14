@@ -5,8 +5,7 @@ module.exports = (app) => {
   app.get("/api/workouts", async (req, res) => {
     try {
       const dbWorkouts = await db.Workout.getAllWorkouts();
-      console.log("dbWorkouts ", dbWorkouts);
-      await res.send(dbWorkouts);
+      res.send(dbWorkouts);
     } catch (error) {
       res.status(503).send("There was an issue retrieving from the database");
     }
