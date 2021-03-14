@@ -41,7 +41,13 @@ const WorkoutSchema = new Schema({
 });
 
 WorkoutSchema.statics.getAllWorkouts = function () {
-  return this.find({});
+  return this.aggregate([
+    {
+      $addFields: {
+        totalDuration: { $sum: "$exercises.duration" },
+      },
+    },
+  ]);
 };
 
 WorkoutSchema.statics.addExercise = function (newExercise, id) {
@@ -52,6 +58,15 @@ WorkoutSchema.statics.createWorkout = function () {
     return dbWorkout;
   });
   return newWorkout;
+};
+WorkoutSchema.statics.getTotalWorkoutTime = function (id) {
+  return this.aggregate([
+    {
+      $addFields: {
+        totalWorkoutTime: { $sum: "exercises.duration" },
+      },
+    },
+  ]);
 };
 
 const Workout = mongoose.model("Workout", WorkoutSchema);
