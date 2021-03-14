@@ -39,6 +39,10 @@ const WorkoutSchema = new Schema({
   ],
 });
 
+WorkoutSchema.statics.getAllWorkouts = function () {
+  return this.find({});
+};
+
 const Workout = mongoose.model("Workout", WorkoutSchema);
 
 module.exports = Workout;
