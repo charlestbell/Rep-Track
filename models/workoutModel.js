@@ -49,6 +49,20 @@ WorkoutSchema.statics.getAllWorkouts = function () {
     },
   ]);
 };
+WorkoutSchema.statics.getLastSevenDays = function () {
+  return this.aggregate([
+    {
+      $match: {
+        day: { $gte: new Date(new Date().setDate(new Date().getDate() - 7)) },
+      },
+    },
+    {
+      $addFields: {
+        totalDuration: { $sum: "$exercises.duration" },
+      },
+    },
+  ]).sort({ day: 1 });
+};
 
 WorkoutSchema.statics.addExercise = function (newExercise, id) {
   return this.updateOne({ _id: id }, { $push: { exercises: newExercise } });
@@ -58,15 +72,6 @@ WorkoutSchema.statics.createWorkout = function () {
     return dbWorkout;
   });
   return newWorkout;
-};
-WorkoutSchema.statics.getTotalWorkoutTime = function (id) {
-  return this.aggregate([
-    {
-      $addFields: {
-        totalWorkoutTime: { $sum: "exercises.duration" },
-      },
-    },
-  ]);
 };
 
 const Workout = mongoose.model("Workout", WorkoutSchema);
