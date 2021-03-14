@@ -21,13 +21,12 @@ module.exports = (app) => {
     }
   });
 
-  app.post("/api/workouts", (req, res) => {
-    db.Workout.create()
-      .then((dbWorkouts) => {
-        res.json(dbWorkouts);
-      })
-      .catch((err) => {
-        res.status(503).send("There was an issue adding to to the database");
-      });
+  app.post("/api/workouts", async (req, res) => {
+    try {
+      dbWorkout = await db.Workout.createWorkout();
+      res.json(dbWorkout);
+    } catch (error) {
+      res.status(503).send("There was an issue adding to to the database");
+    }
   });
 };

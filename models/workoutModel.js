@@ -5,6 +5,7 @@ const WorkoutSchema = new Schema({
   day: {
     type: Date,
     required: "Date is Required",
+    default: Date.now,
   },
 
   exercises: [
@@ -45,6 +46,12 @@ WorkoutSchema.statics.getAllWorkouts = function () {
 
 WorkoutSchema.statics.addExercise = function (newExercise, id) {
   return this.updateOne({ _id: id }, { $push: { exercises: newExercise } });
+};
+WorkoutSchema.statics.createWorkout = function () {
+  newWorkout = this.create({}).then((dbWorkout) => {
+    return dbWorkout;
+  });
+  return newWorkout;
 };
 
 const Workout = mongoose.model("Workout", WorkoutSchema);
