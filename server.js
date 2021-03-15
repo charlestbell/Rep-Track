@@ -18,9 +18,13 @@ app.use(express.static("public"));
 require(`./routes/htmlRoutes.js`)(app);
 require(`./routes/apiRoutes.js`)(app);
 
+mongoose;
 mongoose
-  .connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
+  .connect(process.env.MONGODB_URI || "mongodb://localhost/rep-track", {
     useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
   })
   .then(() => {
     console.log("Database Connected!");

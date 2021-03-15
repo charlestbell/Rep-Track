@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const db = require("../models");
 
 module.exports = (app) => {
+  // Get all workouts
   app.get("/api/workouts", async (req, res) => {
     try {
       const dbWorkouts = await db.Workout.getAllWorkouts();
